@@ -30,6 +30,8 @@ const Form = () => {
     });
   };
 
+  const instance = axios.create({ baseURL: "http://64.227.105.114:80/" });
+
   const withdraw = useMutation<
     void,
     void,
@@ -39,7 +41,8 @@ const Form = () => {
     },
     void
   >((payload) => {
-    return axios.post("http://64.227.105.114:80/", payload);
+    return instance.put("/", payload);
+    // return axios.post("http://64.227.105.114:80/", payload);
   });
 
   const handleSubmit = () => {

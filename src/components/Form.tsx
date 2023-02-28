@@ -41,8 +41,8 @@ const Form = () => {
     },
     void
   >((payload) => {
-    return instance.put("/", payload);
-    // return axios.post("http://64.227.105.114:80/", payload);
+    // return instance.put("/", payload);
+    return axios.post("http://64.227.105.114:80/", payload);
   });
 
   const handleSubmit = () => {

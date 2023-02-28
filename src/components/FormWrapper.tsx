@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactNotifications } from "react-notifications-component";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Form from "./Form";
 
@@ -7,6 +8,7 @@ const FormWrapper = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactNotifications />
       <Form />
     </QueryClientProvider>
   );

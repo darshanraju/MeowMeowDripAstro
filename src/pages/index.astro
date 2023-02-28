@@ -7,7 +7,7 @@ import DripGreyText from "../assets/DripWhiteText.svg";
 import FormWrapper from "../components/FormWrapper.jsx";
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="Meow Meow Drip">
   <main style="background-color: #212529;">
     <div class="flex flex-col justify-center items-center pt-10">
       <div style={{ height: "180px", width: "140px" }}>
@@ -34,7 +34,7 @@ import FormWrapper from "../components/FormWrapper.jsx";
         />
       </div>
       <div class="text-white pt-5 font-bold text-lg">ETH Testnet Faucet</div>
-      <FormWrapper client:load />
+      <FormWrapper client:only="react" />
       <div class="text-yellow-400 pt-5">Up to 1 testnet ETH per 24h</div>
     </div>
   </main>

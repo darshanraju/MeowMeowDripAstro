@@ -39,7 +39,7 @@ const Form = () => {
     },
     void
   >((payload) => {
-    return axios.post("/", payload);
+    return axios.post("http://64.227.105.114:80/", payload);
   });
 
   const handleSubmit = () => {

@@ -43,7 +43,15 @@ const Form = () => {
   >((payload) => {
     // return instance.put("/", payload);
     // return axios.post("http://127.0.0.1:8000/", payload);
-    return axios.post("https://api.meowmeowdrip.com/", payload);
+    return axios.post(
+      "https://api.meowmeowdrip.com/",
+      JSON.stringify(payload),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   });
 
   const handleSubmit = () => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { ProgressBar } from "react-loader-spinner";
-import { Store } from "react-notifications-component";
 import Withdraw from "../assets/Withdraw.svg";
 import Web3 from "web3";
 
@@ -11,35 +10,18 @@ const Form = () => {
   const [network, setNetwork] = useState("");
   const [walletError, setWalletError] = useState(false);
   const [networkError, setNetworkError] = useState(false);
-
-  const notify = () => {
-    Store.addNotification({
-      title: "Drip Drip Drip",
-      message: `${
-        network.charAt(0).toUpperCase() + network.slice(1)
-      } ETH Sent!`,
-      type: "success",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
-  };
-
-  const instance = axios.create({ baseURL: "http://64.227.105.114:80/" });
+  const [subTextStatus, setSubTextStatus] = useState<
+    "notRequested" | "recieved" | "alreadyRecieved"
+  >("notRequested");
 
   const withdraw = useMutation<
-    void,
-    void,
+    any,
+    any,
     {
       network: string;
       address: string;
     },
-    void
+    any
   >((payload) => {
     // return instance.put("/", payload);
     // return axios.post("http://127.0.0.1:8000/", payload);
@@ -80,10 +62,43 @@ const Form = () => {
     setWalletError(false);
   };
 
+  const subText = () => {
+    switch (subTextStatus) {
+      case "notRequested":
+        return (
+          <div className="text-yellow-400 pt-5">
+            Up to 1 testnet ETH per 24h
+          </div>
+        );
+      case "recieved":
+        return (
+          <div className="text-green-400 pt-5">
+            {network.charAt(0).toUpperCase() + network.slice(1)} ETH Sent!
+          </div>
+        );
+      case "alreadyRecieved":
+        return (
+          <div className="text-red-400 pt-5">
+            `This wallet has already recieved{" "}
+            {network.charAt(0).toUpperCase() + network.slice(1)} tokens. Please
+            try again tommorow!
+          </div>
+        );
+      default:
+        return <></>;
+    }
+  };
+
   useEffect(() => {
     if (withdraw.status === "success") {
-      notify();
+      // notify();
       setWallet("");
+      const status = withdraw.data.data.status;
+      if (status === 0) {
+        setSubTextStatus("alreadyRecieved");
+      } else {
+        setSubTextStatus("recieved");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [withdraw.status]);
@@ -180,6 +195,7 @@ const Form = () => {
           />
         )}
       </div>
+      {subText()}
     </React.Fragment>
   );
 };

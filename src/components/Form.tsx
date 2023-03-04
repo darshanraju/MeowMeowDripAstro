@@ -79,7 +79,7 @@ const Form = () => {
       case "alreadyRecieved":
         return (
           <div className="text-red-400 pt-5">
-            `This wallet has already recieved{" "}
+            This wallet has already recieved{" "}
             {network.charAt(0).toUpperCase() + network.slice(1)} tokens. Please
             try again tommorow!
           </div>

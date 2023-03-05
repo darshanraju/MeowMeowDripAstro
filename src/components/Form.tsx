@@ -8,8 +8,10 @@ import Web3 from "web3";
 const Form = () => {
   const [wallet, setWallet] = useState("");
   const [network, setNetwork] = useState("");
+  const [email, setEmail] = useState("");
   const [walletError, setWalletError] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [subTextStatus, setSubTextStatus] = useState<
     "notRequested" | "recieved" | "alreadyRecieved"
   >("notRequested");
@@ -20,6 +22,7 @@ const Form = () => {
     {
       network: string;
       address: string;
+      "email-address": string;
     },
     any
   >((payload) => {
@@ -42,11 +45,24 @@ const Form = () => {
     if (!isValid) {
       setWalletError(true);
       validInput = false;
+    } else {
+      setWalletError(false);
     }
 
     if (network !== "sepolia" && network !== "goerli") {
       setNetworkError(true);
       validInput = false;
+    } else {
+      setNetworkError(false);
+    }
+
+    const emailExp =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+    if (!email.match(emailExp)) {
+      setEmailError(true);
+      validInput = false;
+    } else {
+      setEmailError(false);
     }
 
     if (!validInput) {
@@ -56,10 +72,11 @@ const Form = () => {
     withdraw.mutate({
       network: network,
       address: wallet,
+      "email-address": email,
     });
 
-    setNetworkError(false);
     setWalletError(false);
+    setEmailError(false);
   };
 
   const subText = () => {
@@ -91,8 +108,8 @@ const Form = () => {
 
   useEffect(() => {
     if (withdraw.status === "success") {
-      // notify();
       setWallet("");
+      setEmail("");
       const status = withdraw.data.data.status;
       if (status === 0) {
         setSubTextStatus("alreadyRecieved");
@@ -145,7 +162,7 @@ const Form = () => {
           )}
         </div>
 
-        <div className="nes-field py-3">
+        <div className="nes-field ">
           <div
             style={{ backgroundColor: "#212529", padding: "1rem" }}
             className="nes-field is-inline"
@@ -169,6 +186,37 @@ const Form = () => {
                 value={wallet}
                 onChange={(e) => setWallet(e.target.value)}
                 placeholder="Wallet Address"
+                style={{ textAlign: "center" }}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="nes-field pb-3">
+          <div
+            style={{ backgroundColor: "#212529", padding: "1rem" }}
+            className="nes-field is-inline"
+          >
+            {emailError ? (
+              <div className="nes-field is-inline">
+                <input
+                  type="text"
+                  id="error_field"
+                  className="nes-input is-error"
+                  placeholder="Invalid Email Address"
+                  style={{ textAlign: "center" }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            ) : (
+              <input
+                type="text"
+                id="dark_field"
+                className="nes-input is-dark"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address"
                 style={{ textAlign: "center" }}
               />
             )}
